@@ -11,6 +11,9 @@ class Item <ApplicationRecord
   validates_inclusion_of :active?, :in => [true, false]
   validates_numericality_of :price, greater_than: 0
 
+  has_many :item_discounts
+  has_many :discounts, through: :item_discounts
+
   before_save :default_values
 
   def default_values
