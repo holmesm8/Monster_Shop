@@ -1,6 +1,13 @@
 <h2>New Bulk Discount</h2>
 
 <%= form_tag "/merchant/discounts" do %>
+    <% current_user.merchant.items.each do |item| %>
+      <section id="item-<%= item.id %>">
+        <%= label_tag item.name %>
+        <%= check_box_tag 'item[]', item.id %>
+      </section>
+    <% end %>
+<br>
   <%= label_tag :name %>
   <%= text_field_tag :name %>
 
