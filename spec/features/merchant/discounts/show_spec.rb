@@ -17,9 +17,7 @@ RSpec.describe 'merchant dashboard', type: :feature do
       within("#discount#{@discount_1.id}") do
         click_link("#{@discount_1.name}")
       end
-
       expect(current_path).to eq(merchant_discount_path(@discount_1.id))
-
       expect(page).to have_content(@discount_1.name)
       expect(page).to have_content(@discount_1.percent_off)
       expect(page).to have_content(@discount_1.min_quantity)
