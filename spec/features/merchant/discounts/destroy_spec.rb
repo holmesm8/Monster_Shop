@@ -9,26 +9,18 @@ RSpec.describe 'merchant dashboard', type: :feature do
       @user_2 = @bike_shop.users.create!(name: "Tommy", address: "123", city: "Bruh", state: "CO", zip: "99999", email: "zboy123@hotmail.com", password: "test", role: 1)
       @discount_1 = @bike_shop.discounts.create!(name: "1% Discount", percent_off: 1, min_quantity: 10)
       @discount_2 = @bike_shop.discounts.create!(name: "5% Discount", percent_off: 5, min_quantity: 20)
-      @discount_3 = @meg.discounts.create!(name: "10% Discount", percent_off: 10, min_quantity: 30)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_2)
-      visit '/merchant'
-      click_link "Manage Bulk Discounts"
+      visit '/merchant/discounts'
     end
 
-    it "can link to create a new discount" do
-      visit '/merchant'
-      click_link "Manage Bulk Discount"
-
-      click_link "New Bulk Discount"
-      expect(current_path).to eq("/merchant/discounts/new")
-
-      fill_in "Name", with: "20% Discount"
-      fill_in "Percent off", with: 20
-      fill_in "Min quantity", with: 50
-      click_on "Create Discount"
-
+    it "can destroy a bulk discount" do
+      expect(@bike_shop.discounts.count).to eq(2)
+      within("#discount#{@discount_1.id}") do
+        click_button("Delete Bulk Discount")
+      end
       expect(current_path).to eq("/merchant/discounts")
-      expect(page).to have_content("20% Discount")
+      expect(page).to have_content("#{@discount_1.name} has been deleted.")
+      expect(@bike_shop.discounts.count).to eq(1)
     end
   end
 end
