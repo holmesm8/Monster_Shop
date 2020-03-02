@@ -14,13 +14,10 @@ RSpec.describe 'merchant dashboard', type: :feature do
     end
 
     it "can destroy a bulk discount" do
-
       expect(@bike_shop.discounts.count).to eq(2)
-
       within("#discount#{@discount_1.id}") do
         click_button("Delete Bulk Discount")
       end
-
       expect(current_path).to eq("/merchant/discounts")
       expect(page).to have_content("#{@discount_1.name} has been deleted.")
       expect(@bike_shop.discounts.count).to eq(1)
