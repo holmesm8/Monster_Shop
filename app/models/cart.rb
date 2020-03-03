@@ -27,7 +27,7 @@ class Cart
       discounted_subtotal(item)
     else
       item.price * @contents[item.id.to_s]
-    end   
+    end
   end
 
   def total
@@ -47,15 +47,10 @@ class Cart
   end
 
   def best_discount(item)
-    highest_discounts = item.discounts.order(min_quantity: :desc)
-    highest = 0
-    highest_discounts.each do |discount|
-      if @contents[item.id.to_s] >= discount.min_quantity
-        highest = discount.percent_off
-        break
-      end
+    discount = Discount.joins(:item_discounts).where("item_id = #{item.id} AND #{@contents[item.id.to_s]} >= discounts.min_quantity").order(percent_off: :desc).limit(1).first
+    if discount != nil
+      discount.percent_off / 100.to_f
     end
-    highest / 100.to_f
   end
 
   def add_quantity id
