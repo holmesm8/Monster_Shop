@@ -29,7 +29,7 @@ class Cart
   def total
     @contents.sum do |item_id,quantity|
       item = Item.find(item_id)
-      if highest_discounts(item)
+      if best_discount(item)
         discounted_subtotal(item)
       else
         item.price * quantity

@@ -52,7 +52,5 @@ RSpec.describe Cart, type: :model do
       cart = Cart.new(@chain.id.to_s => 5)
       expect(cart.discounted_subtotal(@chain)).to eq(225)
     end
-
-
   end
 end
