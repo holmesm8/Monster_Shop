@@ -28,8 +28,30 @@ class Cart
 
   def total
     @contents.sum do |item_id,quantity|
-      Item.find(item_id).price * quantity
+      item = Item.find(item_id)
+      if highest_discounts(item)
+        discounted_subtotal(item)
+      else
+        item.price * quantity
+      end
     end
+  end
+
+  def discounted_subtotal(item)
+    subtotal = (item.price * @contents[item.id.to_s])
+    subtotal - (subtotal * best_discount(item))
+  end
+
+  def best_discount(item)
+    highest_discounts = item.discounts.order(min_quantity: :desc)
+    highest = 0
+    highest_discounts.each do |discount|
+      if @contents[item.id.to_s] >= discount.min_quantity
+        highest = discount.percent_off
+        break
+      end
+    end
+    highest / 100.to_f
   end
 
   def add_quantity id

@@ -33,5 +33,26 @@ RSpec.describe Cart, type: :model do
       expect(@cart.quantity_zero?(@chain.id.to_s)).to eq(true)
     end
 
+    it "#best_discount" do
+      @discount = @bike_shop.discounts.create!(name: "10% Discount", percent_off: 10, min_quantity: 5)
+      @discount2 = @bike_shop.discounts.create!(name: "15% Discount", percent_off: 15, min_quantity: 6)
+      @item_discount = ItemDiscount.create!(item_id: @chain.id, discount_id: @discount.id)
+      @item_discount2 = ItemDiscount.create!(item_id: @chain.id, discount_id: @discount2.id)
+      cart = Cart.new(@chain.id.to_s => 10)
+      expected_result = 0.15
+
+      expect(cart.best_discount(@chain)).to eq(expected_result)
+    end
+
+
+    it "#discounted_subtotal" do
+      @discount = @bike_shop.discounts.create!(name: "10% Discount", percent_off: 10, min_quantity: 5)
+      @item_discount = ItemDiscount.create!(item_id: @chain.id, discount_id: @discount.id)
+
+      cart = Cart.new(@chain.id.to_s => 5)
+      expect(cart.discounted_subtotal(@chain)).to eq(225)
+    end
+
+
   end
 end
