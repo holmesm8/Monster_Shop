@@ -12,15 +12,13 @@ class Merchant::DiscountsController < Merchant::BaseController
 
   def create
     merchant = current_user.merchant
-    discount = merchant.discounts.new(discount_params)
-    if discount.save
-      all_merchant_items = Item.find(params[:item])
-      discount.items << all_merchant_items
-      flash[:success] = "#{discount.name} has now been created."
-      redirect_to "/merchant/discounts"
-    else
+    discount = merchant.discounts.create(discount_params)
+    if !discount.save || params[:item] == nil
       flash[:error] = discount.errors.full_messages.to_sentence
       render :new
+    else
+      flash[:success] = "#{discount.name} has now been created."
+      redirect_to "/merchant/discounts"
     end
   end
 

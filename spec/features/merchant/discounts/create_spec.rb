@@ -32,7 +32,6 @@ RSpec.describe 'merchant dashboard', type: :feature do
       click_on "Create Discount"
 
       expect(current_path).to eq("/merchant/discounts")
-      expect(page).to have_content("20% Discount")
 
       created_discount_item = ItemDiscount.last
       expect(created_discount_item.discount.name).to eq("20% Discount")

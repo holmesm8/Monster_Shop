@@ -5,6 +5,6 @@ class Discount <ApplicationRecord
                         :percent_off,
                         :min_quantity
 
-  has_many :item_discounts
+  has_many :item_discounts, dependent: :destroy
   has_many :items, through: :item_discounts
 end
