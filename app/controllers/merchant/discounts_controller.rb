@@ -17,8 +17,7 @@ class Merchant::DiscountsController < Merchant::BaseController
       flash[:error] = discount.errors.full_messages.to_sentence
       render :new
     else
-      item = Item.find(params[:item])
-      discount.items << item
+      discount.items << Item.find(params[:item])
       flash[:success] = "#{discount.name} has now been created."
       redirect_to "/merchant/discounts"
     end
