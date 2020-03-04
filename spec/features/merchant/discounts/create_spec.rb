@@ -18,16 +18,14 @@ RSpec.describe 'merchant dashboard', type: :feature do
     end
 
     it "can link to create a new discount associated with an item" do
-      visit '/merchant'
-      click_link "Manage Bulk Discount"
 
       click_link "New Bulk Discount"
       expect(current_path).to eq("/merchant/discounts/new")
 
+
       within "#item-#{@tire.id}" do
         page.check "item_"
       end
-
       fill_in "Name", with: "20% Discount"
       fill_in "Percent off", with: 20
       fill_in "Min quantity", with: 50
@@ -38,6 +36,19 @@ RSpec.describe 'merchant dashboard', type: :feature do
 
       created_discount_item = ItemDiscount.last
       expect(created_discount_item.discount.name).to eq("20% Discount")
+    end
+
+    it "cannot create an item with any text field empty" do
+      click_link "New Bulk Discount"
+
+      within "#item-#{@tire.id}" do
+        page.check "item_"
+      end
+
+      fill_in "Percent off", with: 20
+      fill_in "Min quantity", with: 50
+      click_on "Create Discount"
+      expect(page).to have_content("Name can't be blank")
     end
   end
 end
